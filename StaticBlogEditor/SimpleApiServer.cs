@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ public class SimpleApiServer : IDisposable
     public SimpleApiServer(string prefix)
     {
         DotNetEnv.Env.Load();
-        
+
         blogPath = Environment.GetEnvironmentVariable("BLOG_PATH") ?? "";
         if (string.IsNullOrWhiteSpace(blogPath)){}
 
@@ -87,6 +88,41 @@ public class SimpleApiServer : IDisposable
         await res.OutputStream.WriteAsync(fileBytes, 0, fileBytes.Length).ConfigureAwait(false);
     }
 
+    string[] getFilesForMarkdown(string fileName, string md)
+    {
+        Regex regex = new(@"(!?\[([^\]]*)\]\(([^)]+)\))");
+        MatchCollection matches = regex.Matches(md);
+        string[] filePaths = [.. matches.Cast<Match>()
+            .Select((e) => {
+                string imageFileName = Path.GetFileName(e.Groups[3].Value);
+                return Path.Join(assetsPath, "img", "blog", fileName, imageFileName);
+            })
+            .Distinct()];
+        return filePaths;
+    }
+
+    void cleanFiles(string fileName, string md)
+    {
+        string dirPath = Path.Join(assetsPath, "img", "blog", fileName);
+        if (!Directory.Exists(dirPath))
+        {
+            return;
+        }
+
+        string[] files = getFilesForMarkdown(fileName, md);
+
+        string[] filesInDir = Directory.GetFiles(dirPath);
+        IEnumerable<string> filesToDelete = filesInDir.Except(files);
+        foreach (string fileToDelete in filesToDelete)
+        {
+            try
+            {
+                File.Delete(fileToDelete);
+            }
+            catch {}
+        }
+    }
+
     async Task HandleContextAsync(HttpListenerContext ctx)
     {
         HttpListenerRequest req = ctx.Request;
@@ -121,6 +157,7 @@ public class SimpleApiServer : IDisposable
                         string filePath = Path.Join(blogPath, saveData.FileName + ".md");
                         string md = $"---\ntitle: {saveData.Title}\nauthors: {saveData.Author}\n---\n" + saveData.Content ?? string.Empty;
                         File.WriteAllText(filePath, md);
+                        cleanFiles(saveData.FileName, md);
                         res.StatusCode = (int)HttpStatusCode.OK;
                         await WriteJsonAsync(res, new { message = "File saved successfully", fileName = saveData.FileName, status = "success" });
                         return;
@@ -128,6 +165,7 @@ public class SimpleApiServer : IDisposable
 
                     res.StatusCode = (int)HttpStatusCode.BadRequest;
                     await WriteJsonAsync(res, new { error = "Invalid save request", detail = "Missing or invalid fileName" });
+
                     return;
                 }
 
@@ -400,7 +438,7 @@ public class SimpleApiServer : IDisposable
             return result;
         }
 
-        foreach (var fullPath in files)
+        foreach (string fullPath in files)
         {
             try
             {
