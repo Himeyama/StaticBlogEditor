@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Common;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
-using Windows.Networking.NetworkOperators;
-using Windows.System;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
-
-namespace WinUIExample;
+namespace StaticBlogEditor;
 public sealed partial class MainWindow : Window
 {
     public MainWindow()
@@ -20,10 +21,11 @@ public sealed partial class MainWindow : Window
 
         Status.statusBar = StatusBar;
         Status.dispatcherQueue = DispatcherQueue;
+
+        // WebView2 EditorUI = new();
         // ZoomIn.KeyboardAcceleratorTextOverride = ZoomInText.Text;
         // ZoomOut.KeyboardAcceleratorTextOverride = ZoomOutText.Text;
     }
-
     void AutoSave_Toggled(object sender, RoutedEventArgs e)
     {
         try{
@@ -74,4 +76,40 @@ public sealed partial class MainWindow : Window
     {
         Close();
     }
+
+    void Grid_DragOver(object sender, DragEventArgs e)
+    {
+        e.AcceptedOperation = DataPackageOperation.Copy;
+    }
+
+    async void Grid_Drop(object sender, DragEventArgs e)
+    {
+        if (e.DataView.Contains(StandardDataFormats.StorageItems))
+        {
+            IReadOnlyList<IStorageItem> items = await e.DataView.GetStorageItemsAsync();
+            var files = items.OfType<StorageFile>().ToList();
+
+            if (files.Count > 0)
+            {
+                // 例：最初のファイルのパスを WebView2 に渡す
+                StorageFile file = files[0];
+                string path = file.Path;
+
+                string fileName = file.Name;
+                IBuffer buffer = await FileIO.ReadBufferAsync(file);
+                string base64Content = Convert.ToBase64String(WindowsRuntimeBufferExtensions.ToArray(buffer));
+                // string content = await FileIO.ReadTextAsync(file);
+                
+                // string base64Content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
+
+                var json = new { fileName, base64Content };
+                string jsonString = System.Text.Json.JsonSerializer.Serialize(json);
+
+                await EditorUI.CoreWebView2.ExecuteScriptAsync(
+                    $"uploadFile('{jsonString}')"
+                );
+            }
+        }
+    }
+
 }

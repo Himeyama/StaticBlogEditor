@@ -35,7 +35,7 @@ public sealed partial class FilePicker : Page {
         StorageFile file = await openPicker.PickSingleFileAsync();
         
         // 選択されたファイルのパスを返す。選択されていない場合はnullを返す。
-        return file?.Path;
+        return file?.Path ?? "";
     }
 
     static void ConfigureFilePicker(FileOpenPicker openPicker)

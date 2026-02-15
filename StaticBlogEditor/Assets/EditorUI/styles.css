@@ -1,0 +1,482 @@
+:root {
+    /* 背景グラデ用 */
+    --bg-1: #ffb4c6;
+    --bg-2: #ff7aa3;
+    --bg-3: #ff4d94;
+
+    /* パネル / 白系 */
+    --panel-bg: #ffffff;
+    --panel-bg-alpha-95: rgba(255, 255, 255, 0.95);
+    --panel-frost-30: rgba(255, 240, 244, 0.3);
+    --panel-frost-90: rgba(255, 245, 248, 0.9);
+
+    /* テキスト / muted */
+    --muted: #8b6b76;
+
+    /* アクセント */
+    --accent: #ff4d94;
+    --accent-secondary: #ff7aa3;
+
+    /* ボーダー */
+    --border-color: #ffd6e8;
+    --input-border: #ffc1d9;
+    --preview-border: #ffd6ec;
+    --code-border: #ffd6ec;
+
+    /* シャドウの色（サイズは別で定義） */
+    --shadow-color: rgba(255, 77, 148, 0.12);
+
+    /* input focus / glow */
+    --input-focus-border: #ff7aa3;
+    --input-bg: #fff5f8;
+    --input-focus-bg: #ffffff;
+    --input-inset-shadow: rgba(255, 122, 163, 0.08);
+
+    /* preview header / file list グラデ */
+    --preview-header-start: #fff5f8;
+    --preview-header-end: #fff0fb;
+    --file-list-start: #fff5f8;
+    --file-list-end: #fff0fb;
+
+    /* preview テキスト色 */
+    --preview-title: #be185d;
+    --preview-author: #e11d48;
+    --preview-text: #4b5563;
+
+    /* pre/code */
+    --pre-start: #ff4d94;
+    --pre-end: #e11d48;
+    --code-bg: #fff0f5;
+    --code-color: #be185d;
+
+    /* save button */
+    --save-start: #ff4d94;
+    --save-end: #ff7aa3;
+    --save-shadow-color: rgba(255, 77, 148, 0.35);
+
+    /* file list / items */
+    --file-item-bg: rgba(255, 245, 247, 0.7);
+    --file-item-hover-bg: rgba(255, 250, 252, 0.95);
+    --file-item-active-start: #ffeef6;
+    --file-item-active-end: #fff5fb;
+    --file-item-active-border: #ff7aa3;
+    --file-item-text: #be185d;
+    --file-item-meta: #ff4d94;
+    --path-color: #ff7aa3;
+
+    /* scrollbar */
+    --scroll-thumb-start: #ffc1d9;
+    --scroll-thumb-end: #ff7aa3;
+
+    /* sparkle */
+    --sparkle-color: #ff4d94;
+}
+
+/* 非色（レイアウト等）は別で定義）*/
+:root {
+    --radius: 16px;
+    --shadow: 0 8px 32px var(--shadow-color);
+}
+
+/* 以下、元のスタイルを色変数へ差し替えたもの */
+* {
+    box-sizing: border-box;
+    /* font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; */
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+    background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, .03) 10px, rgba(255, 255, 255, .03) 20px),
+        linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+}
+
+body {
+    word-wrap: break-word;
+}
+
+#app {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    height: 100vh;
+    gap: 24px;
+    padding: 24px;
+    padding-top: 48px;
+}
+
+.pane {
+    height: calc(100vh - 72px);
+    background: var(--panel-bg-alpha-95);
+    border-radius: var(--radius);
+    box-shadow:
+        var(--shadow),
+        0 0 0 0 var(--panel-frost-30),
+        inset 0 0 0 var(--panel-frost-90);
+    border: 0;
+    backdrop-filter: blur(8px);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.dropzone {
+    background: var(--input-bg);
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.left {
+    min-width: 520px;
+    padding: 16px;
+    gap: 16px;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+}
+
+.right {
+    display: grid;
+    padding: 16px;
+    gap: 16px;
+    justify-content: space-between;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+    grid-template-columns: 1fr;
+}
+
+.meta label {
+    display: block;
+    font-size: 16px;
+    color: var(--preview-title);
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 16px 16px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--input-bg);
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 8px var(--input-inset-shadow);
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    background: var(--input-focus-bg);
+    box-shadow:
+        inset 0 0 8px var(--input-inset-shadow),
+        0 0 0 8px rgba(167, 139, 250, 0.2);
+}
+
+.meta.horizontal {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 16px;
+}
+
+.editor {
+    min-height: 304px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 0;
+    box-shadow:
+        0 8px 16px rgba(139, 92, 246, 0.15),
+        inset 0 0 0 var(--panel-frost-90);
+}
+
+/* preview */
+.preview-header {
+    border-bottom: 0;
+    padding-bottom: 16px;
+    background: linear-gradient(to right, var(--preview-header-start), var(--preview-header-end));
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.preview-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--preview-title);
+    text-shadow: 0 0 0 rgba(167, 139, 250, 0.3);
+}
+
+.preview-author {
+    color: var(--preview-author);
+    font-size: 16px;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.preview {
+    overflow: auto;
+    padding: 16px;
+    border-radius: 8px;
+    background: var(--preview-bg);
+    border: 0;
+    box-shadow: inset 0 0 8px rgba(139, 92, 246, 0.08);
+    box-sizing: border-box;
+}
+
+/* basic markdown styles for preview */
+.preview h1,
+.preview h2,
+.preview h3 {
+    margin: 16px 0;
+    color: var(--preview-title);
+    font-weight: 800;
+}
+
+.preview h1 {
+    font-size: 32px;
+    border-bottom: 0;
+    padding-bottom: 8px;
+}
+
+.preview h2 {
+    font-size: 24px;
+}
+
+.preview h3 {
+    font-size: 16px;
+}
+
+.preview p {
+    margin: 8px 0;
+    color: var(--preview-text);
+    line-height: 1.7;
+}
+
+pre,
+pre code,
+code {
+    white-space: pre-wrap;
+    /* 改行は保持しつつ行を折り返す */
+    white-space: -moz-pre-wrap;
+    /* Firefox 対応 */
+    white-space: -o-pre-wrap;
+    /* 古い Opera 対応（ほとんど不要） */
+    word-wrap: break-word;
+    /* 古いブラウザ対応 */
+    overflow-wrap: anywhere;
+    /* 長い単語も途中で折り返す（推奨） */
+    max-width: 100%;
+    /* 親幅を超えないように */
+    box-sizing: border-box;
+}
+
+.preview pre {
+    padding: 16px;
+    border-radius: 8px;
+    overflow: auto;
+    border: 0;
+    border: solid 4px var(--accent);
+}
+
+.preview code {
+    background: var(--code-bg);
+    color: var(--code-color);
+    padding: 0px 8px;
+    border-radius: 8px;
+    border: 0;
+    font-weight: 600;
+}
+
+.preview pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: "Cascadia Mono", "BIZ UD Gothic";
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--preview-text);
+}
+
+/* actions */
+.actions {
+    align-items: center;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: auto auto auto 1fr;
+    gap: 8px;
+}
+
+.button {
+    background: linear-gradient(135deg, var(--save-start) 0%, var(--save-end) 100%);
+    color: var(--panel-bg);
+    border: none;
+    padding: 16px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+    font-size: 16px;
+    box-shadow:
+        0 8px 16px var(--save-shadow-color),
+        0 0 0 0 var(--panel-frost-30),
+        inset 0 0 0 var(--panel-frost-30);
+    transition: all 0.2s ease;
+    border: 0;
+}
+
+.button:hover {
+    transform: translateY(0px);
+    box-shadow:
+        0 8px 24px rgba(255, 107, 157, 0.5),
+        0 0 0 0 var(--panel-frost-30),
+        inset 0 0 0 var(--panel-frost-30);
+}
+
+.button:active {
+    transform: translateY(0px);
+    box-shadow:
+        0 0 8px rgba(255, 107, 157, 0.3),
+        0 0 0 0 var(--panel-frost-30),
+        inset 0 0 0 var(--panel-frost-30);
+}
+
+.status {
+    color: var(--preview-author);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+/* ファイル一覧 */
+.file-list {
+    padding: 16px;
+    max-width: 240px;
+    overflow-y: scroll;
+    background: linear-gradient(to bottom, var(--file-list-start), var(--file-list-end));
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.file-list::-webkit-scrollbar, .preview::-webkit-scrollbar {
+    width: 16px;
+}
+
+.file-list::-webkit-scrollbar-track, .preview::-webkit-scrollbar-track {
+    background: var(--file-list-end);
+    border-radius: 8px;
+}
+
+.file-list::-webkit-scrollbar-thumb, .preview::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--scroll-thumb-start), var(--scroll-thumb-end));
+    border-radius: 8px;
+    border: 0;
+}
+
+.file-item {
+    padding: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 0;
+    background: var(--file-item-bg);
+    position: relative;
+    user-select: none;
+}
+
+.file-item-path {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.file-item+.file-item {
+    margin-top: 8px;
+}
+
+.file-item:hover {
+    background: var(--file-item-hover-bg);
+    border-color: var(--input-border);
+    transform: translateX(8px);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
+}
+
+.file-item.active {
+    background: linear-gradient(135deg, var(--file-item-active-start) 0%, var(--file-item-active-end) 100%);
+    border-color: var(--file-item-active-border);
+    box-shadow:
+        0 8px 16px rgba(139, 92, 246, 0.2),
+        inset 0 0 0 var(--panel-frost-90);
+}
+
+.file-item .name {
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--file-item-text);
+}
+
+.file-item .meta-small {
+    font-size: 16px;
+    color: var(--file-item-meta);
+    font-weight: 600;
+}
+
+.file-item .path {
+    font-size: 8px;
+    color: var(--path-color);
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Add some fun retro patterns */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.button {
+    animation: float 3s ease-in-out infinite;
+    user-select: none;
+}
+
+/* Sparkle effect on hover */
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.file-item.active::before {
+    content: '★';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sparkle-color);
+    font-size: 16px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.preview img {
+    max-width: 100%;
+}

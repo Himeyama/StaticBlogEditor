@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Markdown Editor</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- marked (markdown -> html) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="fileList" class="pane file-list" aria-label="Markdown file list">
+            <!-- ファイル一覧がここに挿入されます -->
+        </div>
+
+        <aside class="pane left">
+            <div class="meta">
+                <input id="filename" type="text" placeholder="ファイル名（拡張子不要）" />
+            </div>
+
+            <div class="meta horizontal">
+                <div class="meta-item">
+                    <input id="title" type="text" placeholder="記事のタイトル" />
+                </div>
+                <div class="meta-item">
+                    <input id="author" type="text" placeholder="著者名" />
+                </div>
+            </div>
+
+            <div id="editor" class="editor"></div>
+        </aside>
+
+        <main class="pane right">
+            <div class="preview-header">
+                <div class="preview-title" id="preview-title">タイトルがここに表示されます</div>
+                <div class="preview-author" id="preview-author"></div>
+            </div>
+            <div id="preview" class="preview"></div>
+
+            <div class="actions">
+                <button id="newBtn" class="button">新規</button>
+                <button id="saveBtn" class="button">保存</button>
+                <button id="deleteBtn" class="button">削除</button>
+                <span id="status" class="status"></span>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/dev/vs/loader.js"></script>
+    <!-- app.js をモジュールとして読み込む（monaco の Promise を待ってから初期化する） -->
+    <script src="app.js"></script>
+</body>
+
+</html>

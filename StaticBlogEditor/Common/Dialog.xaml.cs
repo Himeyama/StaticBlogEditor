@@ -14,7 +14,7 @@ public sealed partial class Dialog : Page
         InitializeComponent();
     }
 
-    public static async Task<ContentDialogResult> Show(UIElement content, string message, string title = null)
+    public static async Task<ContentDialogResult> Show(UIElement content, string message, string? title = null)
     {
         title ??= I18n.Information();
         ContentDialog contentDialog = new()
@@ -29,7 +29,7 @@ public sealed partial class Dialog : Page
         return await contentDialog.ShowAsync();
     }
 
-    public static async Task<ContentDialogResult> ShowOKCancel(UIElement content, string message, string title = null)
+    public static async Task<ContentDialogResult> ShowOKCancel(UIElement content, string message, string? title = null)
     {
         title ??= I18n.Information();
         ContentDialog contentDialog = new()
@@ -45,7 +45,7 @@ public sealed partial class Dialog : Page
         return await contentDialog.ShowAsync();
     }
 
-    public static async Task<ContentDialogResult> ShowError(UIElement content, string message, string title = null)
+    public static async Task<ContentDialogResult> ShowError(UIElement content, string message, string? title = null)
     {
         title ??= I18n.Error();
         ContentDialog contentDialog = new()

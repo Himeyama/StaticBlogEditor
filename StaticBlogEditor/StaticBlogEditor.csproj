@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- アプリ名 -->
-    <AssemblyName>WinUIExample</AssemblyName>
+    <AssemblyName>StaticBlogEditor</AssemblyName>
     
     <!-- アプリの説明 -->
     <Description>This app is an example of a small WinUI app.</Description>
@@ -23,7 +23,7 @@
     <ApplicationIcon>Assets/App.ico</ApplicationIcon>
 
     <!-- リポジトリの場所 -->
-    <RepositoryUrl>https://github.com/himeyama/WinUIExample</RepositoryUrl>
+    <RepositoryUrl>https://github.com/himeyama/StaticBlogEditor</RepositoryUrl>
     <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
 
     <!-- LICENSE & README.md の場所 -->
@@ -36,14 +36,23 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <SelfContained>true</SelfContained>
     <ApplicationManifest>app.manifest</ApplicationManifest> <!-- HiDpi 対応に必要 -->
+
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" PackagePath="\" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <Content Include="Assets\**\*">
+      <!-- ビルド出力にコピー（変更されたときだけ） -->
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <!-- dotnet publish 時にもコピー -->
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250513003" />
   </ItemGroup>
 </Project>

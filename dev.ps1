@@ -1,11 +1,11 @@
-$csproj = ".\WinUIExample\WinUIExample.csproj"
-$appName = "WinUIExample"
+$csproj = ".\StaticBlogEditor\StaticBlogEditor.csproj"
+$appName = "StaticBlogEditor"
 $publisher = "ひかり"
-$execFile = "WinUIExample.exe"
+$execFile = "StaticBlogEditor.exe"
 $version = (Get-Date).ToString("yy.M.d")
 $date = (Get-Date).ToString("yyyyMMdd")
-$publishDir = "WinUIExample\publish"
-$muiIcon = "WinUIExample\Assets\App.ico"
+$publishDir = "StaticBlogEditor\publish"
+$muiIcon = "StaticBlogEditor\Assets\App.ico"
 
 $startMenuPath = [Environment]::GetFolderPath("Programs")
 
